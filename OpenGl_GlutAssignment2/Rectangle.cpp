@@ -19,6 +19,12 @@ void RectangleDrawable::draw()
 	glVertex2i(startHotSpot.getX(), startHotSpot.getY());
 
 	glEnd();
+
+	glPointSize(5);
+	glBegin(GL_POINTS);
+	glVertex2i(startHotSpot.getX(), startHotSpot.getY());
+	glVertex2i(endHotSpot.getX(), endHotSpot.getY());
+	glEnd();
 }
 
 void RectangleDrawable::remove()

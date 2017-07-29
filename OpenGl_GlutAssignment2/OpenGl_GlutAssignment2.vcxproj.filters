@@ -29,6 +29,12 @@
     <ClCompile Include="CircleDrawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LineDrawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PolygonDrawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">
@@ -44,6 +50,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CircleDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PolygonDrawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

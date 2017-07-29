@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include <math.h>
 //By default it will be int 0
 Vector2::Vector2()
 {
@@ -17,6 +18,12 @@ int Vector2::getX()
 int Vector2::getY()
 {
 	return y;
+}
+float Vector2::Distance(Vector2 a, Vector2 b)
+{
+	float xDelta = a.getX() - b.getX();
+	float yDelta = a.getY() - b.getY();
+	return sqrt(xDelta*xDelta - yDelta*yDelta);
 }
 Vector2::~Vector2()
 {

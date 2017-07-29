@@ -118,7 +118,9 @@
   <ItemGroup>
     <ClCompile Include="CircleDrawable.cpp" />
     <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="LineDrawable.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PolygonDrawable.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
@@ -126,6 +128,8 @@
   <ItemGroup>
     <ClInclude Include="CircleDrawable.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="LineDrawable.h" />
+    <ClInclude Include="PolygonDrawable.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />

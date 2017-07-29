@@ -15,9 +15,11 @@ public:
 	void setCircleRadius(float radius);
 	void setCircleSegments(unsigned int segments);
 	int getCircleSegmentNumber();
+	Vector2 getCircleCenter();
 	~CircleDrawable();
 private:
 	Vector2 centerPosition;
+	Vector2 outterHotSpot;
 	Vector3 drawColour;
 	float radius;
 	int segments;
