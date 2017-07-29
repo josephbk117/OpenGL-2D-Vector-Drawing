@@ -1,0 +1,25 @@
+#pragma once
+#include "Drawable.h"
+#include "GL\glut.h"
+#include <math.h>
+class CircleDrawable : public Drawable
+{
+public:
+	void Drawable::draw();
+	void Drawable::remove();
+	void Drawable::setDrawColour(Vector3 colour);
+	Vector3 Drawable::getDrawColour();
+	CircleDrawable();
+	CircleDrawable(Vector2 centerPosition, float radius);
+	void setCenterPosition(Vector2 centerPosition);
+	void setCircleRadius(float radius);
+	void setCircleSegments(unsigned int segments);
+	int getCircleSegmentNumber();
+	~CircleDrawable();
+private:
+	Vector2 centerPosition;
+	Vector3 drawColour;
+	float radius;
+	int segments;
+};
+
