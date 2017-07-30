@@ -18,8 +18,7 @@ void PolygonDrawable::draw()
 	{
 		glVertex2i(it->getX(), it->getY());
 	}
-	glEnd();
-	
+	glEnd();	
 }
 void PolygonDrawable::setDrawColour(Vector3 colour)
 {

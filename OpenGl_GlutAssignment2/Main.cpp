@@ -17,12 +17,7 @@ enum {
 	TOGGLE_POLY_ADDITIONS,
 	MENU_EXIT
 };
-
 unsigned int useType = USE_LINES;
-/*LineDrawable lineDraw;
-RectangleDrawable rectDraw;
-CircleDrawable circDraw;
-PolygonDrawable polyDraw;*/
 
 std::list<Drawable *> drawableList;
 Drawable *currentDrawable;
@@ -85,33 +80,25 @@ void mouseClicks(int button, int state, int x, int y)
 			if (useType == USE_LINES)
 			{
 				currentDrawable = new LineDrawable(Vector2(x, y), Vector2(0, 0));
-				//lineDraw.setFirstHotSpot(Vector2(x, y));
 			}
 			if (useType == USE_RECTS)
 			{
 				currentDrawable = new RectangleDrawable(Vector2(x, y), Vector2(0, 0), Vector3(0.9f, 0.8f, 0.3f));
-				//rectDraw.setStartPosition(Vector2(x, y));
 			}
 			if (useType == USE_CIRCS)
 			{
 				currentDrawable = new CircleDrawable(Vector2(x, y), 0);
-				//circDraw.setCenterPosition(Vector2(x, y));
 			}
 			if (useType == USE_POLYS)
 			{
-				if (!continueAddingVerticesToPoly) // if not continue then reate new poly
+				if (!continueAddingVerticesToPoly) // if not continue then create new poly
 				{
 					currentDrawable = new PolygonDrawable();
 					currentDrawable->setDrawColour(Vector3(0.8f, 0.3f, 0.6f));
-					dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
 					continueAddingVerticesToPoly = true;
 					drawableList.push_back(currentDrawable);
 				}
-				else
-				{
-					dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
-				}
-				//polyDraw.addNewHotSpot(Vector2(x, y));
+				dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
 			}
 		}
 		if (state == GLUT_UP)
@@ -121,13 +108,11 @@ void mouseClicks(int button, int state, int x, int y)
 				dynamic_cast<LineDrawable *>(currentDrawable)->setLastHotSpot(Vector2(x, y));
 				dynamic_cast<LineDrawable *>(currentDrawable)->setDrawColour(Vector3(0.5f, 0.8f, 0.12f));
 				drawableList.push_back(currentDrawable);
-				//lineDraw.setLastHotSpot(Vector2(x, y));
 			}
 			if (useType == USE_RECTS)
 			{
 				dynamic_cast<RectangleDrawable *>(currentDrawable)->setEndPosition(Vector2(x, y));
 				drawableList.push_back(currentDrawable);
-				//rectDraw.setEndPosition(Vector2(x, y));
 			}
 			if (useType == USE_CIRCS)
 			{
@@ -135,12 +120,6 @@ void mouseClicks(int button, int state, int x, int y)
 				dynamic_cast<CircleDrawable *>(currentDrawable)->setCircleRadius(radius);
 				dynamic_cast<CircleDrawable *>(currentDrawable)->setDrawColour(Vector3(0, 0.5f, 1));
 				drawableList.push_back(currentDrawable);
-				//circDraw.setCircleRadius(Vector2::Distance(circDraw.getCircleCenter(), Vector2(x, y)));
-			}
-			if (useType == USE_POLYS)
-			{
-				//if(continueAddingVerticesToPoly)
-					//dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
 			}
 		}
 	}
@@ -185,37 +164,12 @@ void reshape(int w, int h)
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	/*Drawable *dr;
-	RectangleDrawable rect(Vector2(0, 0), Vector2(200, 200));
-	CircleDrawable circ(Vector2(0, 0), 50);
-	LineDrawable ld(Vector2(100, 100), Vector2(300, 300));
-	PolygonDrawable pd;
-
-	Vector2 hotAr[] = { Vector2(-200,-200), Vector2(-300,-80),Vector2(-240,-90), Vector2(-220,-280), Vector2(-420,-350) };
-	int size = sizeof(hotAr) / sizeof(hotAr[0]);
-	pd.addNewHotSpotArray(hotAr, size);
-
-	circ.setCircleSegments(12);
-	dr = &circ;
-	dr->setDrawColour(Vector3(0.1f, 0.7f, 0.7f));
-	dr->draw();
-	dr = &rect;
-	dr->setDrawColour(Vector3(0.8f, 0.1f, 0.4f));
-	dr->draw();
-
-	dr = &ld;
-	dr->setDrawColour(Vector3(0.4f, 0.9f, 0.7f));
-	dr->draw();
-
-	dr = &pd;
-	dr->setDrawColour(Vector3(0.7f, 0.9f, 0.4f));
-	dr->draw();*/
-	//circDraw.setCircleSegments(globalSegmentCount);
 	for (std::list<Drawable *>::iterator it = drawableList.begin(); it != drawableList.end(); it++)
 	{
+		if (typeid(**it) == typeid(CircleDrawable))
+			dynamic_cast<CircleDrawable *>(*it)->setCircleSegments(globalSegmentCount);
 		(*it)->draw();
 	}
-
 	glutPostRedisplay();
 	glutSwapBuffers();
 }
@@ -229,16 +183,6 @@ int main(int argc, char **argv)
 	glEnable(GL_DEPTH_TEST);
 	glutMouseFunc(mouseClicks);
 
-	/*lineDraw.setDrawColour(Vector3(0.6f, 0.9f, 0.2f));
-	rectDraw.setDrawColour(Vector3(0.2f, 0.7f, 0.9f));
-	circDraw.setDrawColour(Vector3(0.9f, 0.7f, 0.4f));
-	polyDraw.setDrawColour(Vector3(0.9f, 0.2f, 0.9f));
-
-	drawableList.push_back(&lineDraw);
-	drawableList.push_back(&rectDraw);
-	drawableList.push_back(&circDraw);
-	drawableList.push_back(&polyDraw);*/
-
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 
@@ -247,6 +191,5 @@ int main(int argc, char **argv)
 
 	glutKeyboardFunc(processNormalKeys);
 	glutMainLoop();
-	
 	return 0;
 }
