@@ -2,6 +2,7 @@
 
 void PolygonDrawable::draw()
 {
+	glPointSize(5);
 	glBegin(GL_POINTS);
 	glColor3f(drawColour.getX() + 0.3f, drawColour.getY() + 0.1f, drawColour.getZ() + 0.1f);
 	for (std::list<Vector2>::iterator it = hotSpots.begin(); it != hotSpots.end(); it++)

@@ -6,20 +6,31 @@
 #include "Drawable.h"
 #include "LineDrawable.h"
 #include "PolygonDrawable.h"
+#include <list>
+#include <iterator>
 
 enum {
 	USE_LINES = 1,
 	USE_RECTS,
 	USE_CIRCS,
 	USE_POLYS,
+	TOGGLE_POLY_ADDITIONS,
 	MENU_EXIT
 };
 
 unsigned int useType = USE_LINES;
-LineDrawable lineDraw;
+/*LineDrawable lineDraw;
 RectangleDrawable rectDraw;
 CircleDrawable circDraw;
-PolygonDrawable polyDraw;
+PolygonDrawable polyDraw;*/
+
+std::list<Drawable *> drawableList;
+Drawable *currentDrawable;
+bool continueAddingVerticesToPoly = false;
+
+int globalSegmentCount = 10;
+const unsigned int MAX_CIRCLE_SEGMENTS = 30;
+const unsigned int MIN_CIRCLE_SEGMENTS = 4;
 
 void processNormalKeys(unsigned char key, int x, int y)
 {
@@ -42,6 +53,9 @@ void SelectFromMenu(int commandID)
 	case USE_POLYS:
 		useType = USE_POLYS;
 		break;
+	case TOGGLE_POLY_ADDITIONS:
+		continueAddingVerticesToPoly = !continueAddingVerticesToPoly;
+		break;
 	case MENU_EXIT:
 		exit(0);
 		break;
@@ -57,6 +71,7 @@ int BuildPopupMenu(void)
 	glutAddMenuEntry("USE RECTANGLES", USE_RECTS);
 	glutAddMenuEntry("USE CIRCLES", USE_CIRCS);
 	glutAddMenuEntry("USE POLYGONS", USE_POLYS);
+	glutAddMenuEntry("TOGGLE POLYGON VERTEX ADDITION", TOGGLE_POLY_ADDITIONS);
 	glutAddMenuEntry("Exit\tEsc", MENU_EXIT);
 	return menu;
 }
@@ -69,38 +84,83 @@ void mouseClicks(int button, int state, int x, int y)
 		{
 			if (useType == USE_LINES)
 			{
-				lineDraw.setFirstHotSpot(Vector2(x, y));
+				currentDrawable = new LineDrawable(Vector2(x, y), Vector2(0, 0));
+				//lineDraw.setFirstHotSpot(Vector2(x, y));
 			}
 			if (useType == USE_RECTS)
 			{
-				rectDraw.setStartPosition(Vector2(x, y));
+				currentDrawable = new RectangleDrawable(Vector2(x, y), Vector2(0, 0), Vector3(0.9f, 0.8f, 0.3f));
+				//rectDraw.setStartPosition(Vector2(x, y));
 			}
 			if (useType == USE_CIRCS)
 			{
-				circDraw.setCenterPosition(Vector2(x, y));
+				currentDrawable = new CircleDrawable(Vector2(x, y), 0);
+				//circDraw.setCenterPosition(Vector2(x, y));
 			}
 			if (useType == USE_POLYS)
 			{
-				polyDraw.addNewHotSpot(Vector2(x, y));
+				if (!continueAddingVerticesToPoly) // if not continue then reate new poly
+				{
+					currentDrawable = new PolygonDrawable();
+					currentDrawable->setDrawColour(Vector3(0.8f, 0.3f, 0.6f));
+					dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
+					continueAddingVerticesToPoly = true;
+					drawableList.push_back(currentDrawable);
+				}
+				else
+				{
+					dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
+				}
+				//polyDraw.addNewHotSpot(Vector2(x, y));
 			}
 		}
 		if (state == GLUT_UP)
 		{
 			if (useType == USE_LINES)
 			{
-				lineDraw.setLastHotSpot(Vector2(x, y));
+				dynamic_cast<LineDrawable *>(currentDrawable)->setLastHotSpot(Vector2(x, y));
+				dynamic_cast<LineDrawable *>(currentDrawable)->setDrawColour(Vector3(0.5f, 0.8f, 0.12f));
+				drawableList.push_back(currentDrawable);
+				//lineDraw.setLastHotSpot(Vector2(x, y));
 			}
 			if (useType == USE_RECTS)
 			{
-				rectDraw.setEndPosition(Vector2(x, y));
+				dynamic_cast<RectangleDrawable *>(currentDrawable)->setEndPosition(Vector2(x, y));
+				drawableList.push_back(currentDrawable);
+				//rectDraw.setEndPosition(Vector2(x, y));
 			}
 			if (useType == USE_CIRCS)
 			{
-				circDraw.setCircleRadius(Vector2::Distance(circDraw.getCircleCenter(), Vector2(x, y)));
+				float radius = Vector2::Distance(dynamic_cast<CircleDrawable *>(currentDrawable)->getCircleCenter(), Vector2(x, y));
+				dynamic_cast<CircleDrawable *>(currentDrawable)->setCircleRadius(radius);
+				dynamic_cast<CircleDrawable *>(currentDrawable)->setDrawColour(Vector3(0, 0.5f, 1));
+				drawableList.push_back(currentDrawable);
+				//circDraw.setCircleRadius(Vector2::Distance(circDraw.getCircleCenter(), Vector2(x, y)));
 			}
 			if (useType == USE_POLYS)
 			{
-				
+				//if(continueAddingVerticesToPoly)
+					//dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
+			}
+		}
+	}
+	if (button == 3 || button == 4)
+	{
+		if (useType == USE_CIRCS)
+		{
+			if (button == 3)
+			{
+				if (globalSegmentCount > MAX_CIRCLE_SEGMENTS)
+					globalSegmentCount = 30;
+				else
+					globalSegmentCount++;
+			}
+			else
+			{
+				if (globalSegmentCount < MIN_CIRCLE_SEGMENTS)
+					globalSegmentCount = MIN_CIRCLE_SEGMENTS;
+				else
+					globalSegmentCount--;
 			}
 		}
 	}
@@ -150,17 +210,11 @@ void display(void)
 	dr = &pd;
 	dr->setDrawColour(Vector3(0.7f, 0.9f, 0.4f));
 	dr->draw();*/
-	lineDraw.setDrawColour(Vector3(0.6f, 0.9f, 0.2f));
-	lineDraw.draw();
-
-	rectDraw.setDrawColour(Vector3(0.2f, 0.7f, 0.9f));
-	rectDraw.draw();
-
-	circDraw.setDrawColour(Vector3(0.9f, 0.7f, 0.4f));
-	circDraw.draw();
-
-	polyDraw.setDrawColour(Vector3(0.9f, 0.2f, 0.9f));
-	polyDraw.draw();
+	//circDraw.setCircleSegments(globalSegmentCount);
+	for (std::list<Drawable *>::iterator it = drawableList.begin(); it != drawableList.end(); it++)
+	{
+		(*it)->draw();
+	}
 
 	glutPostRedisplay();
 	glutSwapBuffers();
@@ -175,6 +229,16 @@ int main(int argc, char **argv)
 	glEnable(GL_DEPTH_TEST);
 	glutMouseFunc(mouseClicks);
 
+	/*lineDraw.setDrawColour(Vector3(0.6f, 0.9f, 0.2f));
+	rectDraw.setDrawColour(Vector3(0.2f, 0.7f, 0.9f));
+	circDraw.setDrawColour(Vector3(0.9f, 0.7f, 0.4f));
+	polyDraw.setDrawColour(Vector3(0.9f, 0.2f, 0.9f));
+
+	drawableList.push_back(&lineDraw);
+	drawableList.push_back(&rectDraw);
+	drawableList.push_back(&circDraw);
+	drawableList.push_back(&polyDraw);*/
+
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 
@@ -183,5 +247,6 @@ int main(int argc, char **argv)
 
 	glutKeyboardFunc(processNormalKeys);
 	glutMainLoop();
+	
 	return 0;
 }
