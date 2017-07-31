@@ -15,13 +15,17 @@ enum {
 	USE_CIRCS,
 	USE_POLYS,
 	TOGGLE_POLY_ADDITIONS,
+	TOGGLE_EDIT_MODE,
 	MENU_EXIT
 };
 unsigned int useType = USE_LINES;
 
 std::list<Drawable *> drawableList;
 Drawable *currentDrawable;
+Vector2 *currentHeldHotspot;
+
 bool continueAddingVerticesToPoly = false;
+bool isEditMode = false;
 
 int globalSegmentCount = 10;
 const unsigned int MAX_CIRCLE_SEGMENTS = 30;
@@ -51,6 +55,9 @@ void SelectFromMenu(int commandID)
 	case TOGGLE_POLY_ADDITIONS:
 		continueAddingVerticesToPoly = !continueAddingVerticesToPoly;
 		break;
+	case TOGGLE_EDIT_MODE:
+		isEditMode = !isEditMode;
+		break;
 	case MENU_EXIT:
 		exit(0);
 		break;
@@ -67,8 +74,28 @@ int BuildPopupMenu(void)
 	glutAddMenuEntry("USE CIRCLES", USE_CIRCS);
 	glutAddMenuEntry("USE POLYGONS", USE_POLYS);
 	glutAddMenuEntry("TOGGLE POLYGON VERTEX ADDITION", TOGGLE_POLY_ADDITIONS);
+	glutAddMenuEntry("TOGGLE EDIT MODE", TOGGLE_EDIT_MODE);
 	glutAddMenuEntry("Exit\tEsc", MENU_EXIT);
 	return menu;
+}
+
+void getClickedHotspot(int x, int y)
+{
+	for (std::list<Drawable *>::iterator it = drawableList.begin(); it != drawableList.end(); it++)
+	{
+		int count = (*it)->getNumberOfHotSpots();
+		std::cout << "Count = " << count << std::endl;
+		Vector2* vec[150];
+		(*it)->getHotspots(vec);
+		for (int i = 0; i < count; i++)
+		{			
+			if ((x >= vec[i]->getX() - 10 && x <= vec[i]->getX() + 10) && (y >= vec[i]->getY() - 10 && y <= vec[i]->getY() + 10))
+			{
+				currentHeldHotspot = vec[i];
+				break;
+			}
+		}
+	}
 }
 
 void mouseClicks(int button, int state, int x, int y)
@@ -77,51 +104,75 @@ void mouseClicks(int button, int state, int x, int y)
 	{
 		if (state == GLUT_DOWN)
 		{
-			if (useType == USE_LINES)
+			//Make function that takes pram as mouse position 
+			//then go through all vector2s in all objects
+			//then find closest one
+			//then return the address of it.
+			//then use that Vector2 pointer and place it when mouse up
+
+			if (isEditMode)
 			{
-				currentDrawable = new LineDrawable(Vector2(x, y), Vector2(0, 0));
-			}
-			if (useType == USE_RECTS)
-			{
-				currentDrawable = new RectangleDrawable(Vector2(x, y), Vector2(0, 0), Vector3(0.9f, 0.8f, 0.3f));
-			}
-			if (useType == USE_CIRCS)
-			{
-				currentDrawable = new CircleDrawable(Vector2(x, y), 0);
-			}
-			if (useType == USE_POLYS)
-			{
-				if (!continueAddingVerticesToPoly) // if not continue then create new poly
-				{
-					currentDrawable = new PolygonDrawable();
-					currentDrawable->setDrawColour(Vector3(0.8f, 0.3f, 0.6f));
-					continueAddingVerticesToPoly = true;
-					drawableList.push_back(currentDrawable);
-				}
-				dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
+				getClickedHotspot(x, y);
 			}
 			else
-				continueAddingVerticesToPoly = false;
+			{
+				if (useType == USE_LINES)
+				{
+					currentDrawable = new LineDrawable(Vector2(x, y), Vector2(0, 0));
+				}
+				if (useType == USE_RECTS)
+				{
+					currentDrawable = new RectangleDrawable(Vector2(x, y), Vector2(0, 0), Vector3(0.9f, 0.8f, 0.3f));
+				}
+				if (useType == USE_CIRCS)
+				{
+					currentDrawable = new CircleDrawable(Vector2(x, y), 0);
+				}
+				if (useType == USE_POLYS)
+				{
+					if (!continueAddingVerticesToPoly) // if not continue then create new poly
+					{
+						currentDrawable = new PolygonDrawable();
+						currentDrawable->setDrawColour(Vector3(0.8f, 0.3f, 0.6f));
+						continueAddingVerticesToPoly = true;
+						drawableList.push_front(currentDrawable);
+					}
+					dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
+				}
+				else
+					continueAddingVerticesToPoly = false;
+			}
 		}
 		if (state == GLUT_UP)
 		{
-			if (useType == USE_LINES)
+			if (isEditMode)
 			{
-				dynamic_cast<LineDrawable *>(currentDrawable)->setLastHotSpot(Vector2(x, y));
-				dynamic_cast<LineDrawable *>(currentDrawable)->setDrawColour(Vector3(0.5f, 0.8f, 0.12f));
-				drawableList.push_back(currentDrawable);
+				if (currentHeldHotspot != nullptr)
+				{
+					currentHeldHotspot->x = x;
+					currentHeldHotspot->y = y;
+				}
 			}
-			if (useType == USE_RECTS)
+			else
 			{
-				dynamic_cast<RectangleDrawable *>(currentDrawable)->setEndPosition(Vector2(x, y));
-				drawableList.push_back(currentDrawable);
-			}
-			if (useType == USE_CIRCS)
-			{
-				float radius = Vector2::Distance(dynamic_cast<CircleDrawable *>(currentDrawable)->getCircleCenter(), Vector2(x, y));
-				dynamic_cast<CircleDrawable *>(currentDrawable)->setCircleRadius(radius);
-				dynamic_cast<CircleDrawable *>(currentDrawable)->setDrawColour(Vector3(0, 0.5f, 1));
-				drawableList.push_back(currentDrawable);
+				if (useType == USE_LINES)
+				{
+					dynamic_cast<LineDrawable *>(currentDrawable)->setLastHotSpot(Vector2(x, y));
+					dynamic_cast<LineDrawable *>(currentDrawable)->setDrawColour(Vector3(0.5f, 0.8f, 0.12f));
+					drawableList.push_front(currentDrawable);
+				}
+				if (useType == USE_RECTS)
+				{
+					dynamic_cast<RectangleDrawable *>(currentDrawable)->setEndPosition(Vector2(x, y));
+					drawableList.push_front(currentDrawable);
+				}
+				if (useType == USE_CIRCS)
+				{
+					float radius = Vector2::Distance(dynamic_cast<CircleDrawable *>(currentDrawable)->getCircleCenter(), Vector2(x, y));
+					dynamic_cast<CircleDrawable *>(currentDrawable)->setCircleRadius(radius);
+					dynamic_cast<CircleDrawable *>(currentDrawable)->setDrawColour(Vector3(0, 0.5f, 1));
+					drawableList.push_front(currentDrawable);
+				}
 			}
 		}
 	}

@@ -9,7 +9,7 @@ void PolygonDrawable::draw()
 		glPointSize(5);
 		glBegin(GL_POINTS);
 		glColor3f(drawColour.getX() + 0.3f, drawColour.getY() + 0.1f, drawColour.getZ() + 0.1f);
-		for (std::list<Vector2>::iterator it = hotSpots.begin(); it != hotSpots.end(); it++)
+		for (std::list<Vector2>::iterator it = hotSpotList.begin(); it != hotSpotList.end(); it++)
 		{
 			glVertex2i(it->getX(), it->getY());
 		}
@@ -19,7 +19,7 @@ void PolygonDrawable::draw()
 	glColor3f(drawColour.getX(), drawColour.getY(), drawColour.getZ());
 	glBegin(GL_POLYGON);
 
-	for (std::list<Vector2>::iterator it = hotSpots.begin(); it != hotSpots.end(); it++)
+	for (std::list<Vector2>::iterator it = hotSpotList.begin(); it != hotSpotList.end(); it++)
 	{
 		glVertex2i(it->getX(), it->getY());
 	}
@@ -39,8 +39,24 @@ void PolygonDrawable::remove()
 
 }
 
+void PolygonDrawable::getHotspots(Vector2* ar[])
+{
+	int cnt = 0;
+	for (std::list<Vector2>::iterator it = hotSpotList.begin(); it != hotSpotList.end(); it++)
+	{
+		ar[cnt] = &(*it);
+		cnt++;
+	}
+}
+
+int PolygonDrawable::getNumberOfHotSpots()
+{
+	return hotSpotCount;
+}
+
 PolygonDrawable::PolygonDrawable()
 {
+	hotSpotCount = 0;
 }
 PolygonDrawable::~PolygonDrawable()
 {
@@ -48,13 +64,15 @@ PolygonDrawable::~PolygonDrawable()
 
 void PolygonDrawable::addNewHotSpot(Vector2 hotSpot)
 {
-	hotSpots.push_back(hotSpot);
+	hotSpotCount++;
+	hotSpotList.push_back(hotSpot);
 }
 
 void PolygonDrawable::addNewHotSpotArray(Vector2* hotSpotArray, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
-		hotSpots.push_back(hotSpotArray[i]);
+		hotSpotCount++;
+		hotSpotList.push_back(hotSpotArray[i]);
 	}
 }

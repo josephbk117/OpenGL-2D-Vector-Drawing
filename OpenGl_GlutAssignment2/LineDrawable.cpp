@@ -13,11 +13,11 @@ void LineDrawable::draw()
 		glVertex2i(hotSpot2.getX(), hotSpot2.getY());
 		glEnd();
 	}
-	
+
 	glBegin(GL_LINES);
 	glVertex2i(hotSpot1.getX(), hotSpot1.getY());
 	glVertex2i(hotSpot2.getX(), hotSpot2.getY());
-	glEnd();	
+	glEnd();
 }
 
 void LineDrawable::setDrawColour(Vector3 colour)
@@ -31,6 +31,15 @@ void LineDrawable::remove()
 Vector3 LineDrawable::getDrawColour()
 {
 	return drawColor;
+}
+void LineDrawable::getHotspots(Vector2* ar[])
+{
+	ar[0] = &hotSpot1;
+	ar[1] = &hotSpot2;
+}
+int LineDrawable::getNumberOfHotSpots()
+{
+	return 2;
 }
 LineDrawable::LineDrawable()
 {

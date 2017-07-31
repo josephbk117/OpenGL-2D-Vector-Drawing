@@ -23,7 +23,7 @@ float Vector2::Distance(Vector2 a, Vector2 b)
 {
 	float xDelta = a.getX() - b.getX();
 	float yDelta = a.getY() - b.getY();
-	return sqrt(xDelta*xDelta - yDelta*yDelta);
+	return sqrt(xDelta*xDelta + yDelta*yDelta);
 }
 Vector2::~Vector2()
 {

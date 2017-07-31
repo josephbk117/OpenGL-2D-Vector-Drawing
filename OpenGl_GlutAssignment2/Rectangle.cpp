@@ -45,25 +45,34 @@ Vector3 RectangleDrawable::getDrawColour()
 	return drawColour;
 }
 
+void RectangleDrawable::getHotspots(Vector2* ar[])
+{
+	ar[0] = &startHotSpot;
+	ar[1] = &endHotSpot;
+}
+int RectangleDrawable::getNumberOfHotSpots()
+{
+	return 2;
+}
 RectangleDrawable::RectangleDrawable()
 {
 	this->startHotSpot = Vector2(0, 0);
 	this->endHotSpot = Vector2(0, 0);
-	drawColour = Vector3(0, 0, 0);
+	drawColour = Vector3(0, 0, 0);	
 }
 
 RectangleDrawable::RectangleDrawable(Vector2 startPosition, Vector2 endPosition)
 {
 	this->startHotSpot = startPosition;
 	this->endHotSpot = endPosition;
-	drawColour = Vector3(0, 0, 0);
+	drawColour = Vector3(0, 0, 0);	
 }
 
 RectangleDrawable::RectangleDrawable(Vector2 startPosition, Vector2 endPosition, Vector3 drawColour)
 {
 	this->startHotSpot = startPosition;
 	this->endHotSpot = endPosition;
-	this->drawColour = drawColour;
+	this->drawColour = drawColour;	
 }
 
 RectangleDrawable::~RectangleDrawable()

@@ -11,6 +11,8 @@ public:
 	void Drawable::remove();
 	void Drawable::setDrawColour(Vector3 colour);
 	Vector3 Drawable::getDrawColour();
+	void Drawable::getHotspots(Vector2* ar[]);
+	int Drawable::getNumberOfHotSpots();
 	RectangleDrawable();
 	RectangleDrawable(Vector2 startPosition, Vector2 endPosition);
 	RectangleDrawable(Vector2 startPosition, Vector2 endPosition, Vector3 drawColour);
@@ -22,7 +24,6 @@ public:
 	void setEndPosition(int x,int y);
 	void setEndPosition(Vector2 endPosition);
 private:
-
 	Vector2 startHotSpot, endHotSpot;
 	Vector3 drawColour;
 };

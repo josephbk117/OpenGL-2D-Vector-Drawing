@@ -10,9 +10,12 @@ public:
 	void Drawable::remove();
 	void Drawable::setDrawColour(Vector3 colour);
 	Vector3 Drawable::getDrawColour();
+	void Drawable::getHotspots(Vector2* ar[]);
+	int Drawable::getNumberOfHotSpots();
 	CircleDrawable();
 	CircleDrawable(Vector2 centerPosition, float radius);
 	void setCenterPosition(Vector2 centerPosition);
+	void setOutterPosition(Vector2 outterPosition);
 	void setCircleRadius(float radius);
 	void setCircleSegments(unsigned int segments);
 	int getCircleSegmentNumber();
