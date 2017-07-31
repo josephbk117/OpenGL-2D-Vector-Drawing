@@ -100,6 +100,8 @@ void mouseClicks(int button, int state, int x, int y)
 				}
 				dynamic_cast<PolygonDrawable *>(currentDrawable)->addNewHotSpot(Vector2(x, y));
 			}
+			else
+				continueAddingVerticesToPoly = false;
 		}
 		if (state == GLUT_UP)
 		{
