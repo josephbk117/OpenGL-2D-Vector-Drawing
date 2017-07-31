@@ -28,6 +28,8 @@ bool continueAddingVerticesToPoly = false;
 bool isEditMode = false;
 
 int globalSegmentCount = 10;
+bool isCurrentHeldVectorTheCenter = false;
+CircleDrawable* circleForAdjustment;
 const unsigned int MAX_CIRCLE_SEGMENTS = 30;
 const unsigned int MIN_CIRCLE_SEGMENTS = 4;
 
@@ -84,14 +86,27 @@ void getClickedHotspot(int x, int y)
 	for (std::list<Drawable *>::iterator it = drawableList.begin(); it != drawableList.end(); it++)
 	{
 		int count = (*it)->getNumberOfHotSpots();
-		std::cout << "Count = " << count << std::endl;
 		Vector2* vec[150];
 		(*it)->getHotspots(vec);
 		for (int i = 0; i < count; i++)
-		{			
+		{
 			if ((x >= vec[i]->getX() - 10 && x <= vec[i]->getX() + 10) && (y >= vec[i]->getY() - 10 && y <= vec[i]->getY() + 10))
 			{
 				currentHeldHotspot = vec[i];
+				if (useType == USE_CIRCS)
+				{
+					if (dynamic_cast<CircleDrawable *>(*it)->isCurrentVectorHeldCenter(currentHeldHotspot))
+					{
+						isCurrentHeldVectorTheCenter = true;
+						std::cout << "The vector is circle center" << std::endl;
+					}
+					else
+					{
+						isCurrentHeldVectorTheCenter = false;
+						std::cout << "The vector is not circle center ( outter )" << std::endl;
+					}
+					circleForAdjustment = dynamic_cast<CircleDrawable *>(*it);
+				}
 				break;
 			}
 		}
@@ -149,8 +164,22 @@ void mouseClicks(int button, int state, int x, int y)
 			{
 				if (currentHeldHotspot != nullptr)
 				{
-					currentHeldHotspot->x = x;
-					currentHeldHotspot->y = y;
+					if (useType == USE_CIRCS)
+					{
+						if (isCurrentHeldVectorTheCenter)
+						{
+							circleForAdjustment->setCenterPosition(Vector2(x, y));
+						}
+						else
+						{
+							circleForAdjustment->setCircleRadius(Vector2::Distance(circleForAdjustment->getCircleCenter(), Vector2(x, y)));
+						}
+					}
+					else
+					{
+						currentHeldHotspot->x = x;
+						currentHeldHotspot->y = y;
+					}
 				}
 			}
 			else

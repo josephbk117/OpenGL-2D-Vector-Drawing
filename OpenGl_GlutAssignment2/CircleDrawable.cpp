@@ -6,7 +6,7 @@ void CircleDrawable::draw()
 {
 	float incValue = (float)(2.0f * PI) / (float)segments;
 	glColor3f(drawColour.getX(), drawColour.getY(), drawColour.getZ());
-	float radius = Vector2::Distance(centerPosition, outterHotSpot);
+	//float radius = Vector2::Distance(centerPosition, outterHotSpot);
 
 	if (isEditable)
 	{
@@ -110,6 +110,13 @@ void CircleDrawable::setCircleSegments(unsigned int segments)
 int CircleDrawable::getCircleSegmentNumber()
 {
 	return segments;
+}
+
+bool CircleDrawable::isCurrentVectorHeldCenter(Vector2 * currentlyHeldVector)
+{
+	if (&centerPosition == currentlyHeldVector)
+		return true;
+	return false;
 }
 
 Vector2 CircleDrawable::getCircleCenter()
