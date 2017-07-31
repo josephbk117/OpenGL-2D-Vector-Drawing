@@ -145,6 +145,37 @@ void mouseClicks(int button, int state, int x, int y)
 	}
 }
 
+void setEditableDrawables(int USE_ENUM)
+{
+	switch (USE_ENUM)
+	{
+	case USE_LINES:
+		LineDrawable::isEditable = true;
+		RectangleDrawable::isEditable = false;
+		CircleDrawable::isEditable = false;
+		PolygonDrawable::isEditable = false;
+		break;
+	case USE_RECTS:
+		LineDrawable::isEditable = false;
+		RectangleDrawable::isEditable = true;
+		CircleDrawable::isEditable = false;
+		PolygonDrawable::isEditable = false;
+		break;
+	case USE_CIRCS:
+		LineDrawable::isEditable = false;
+		RectangleDrawable::isEditable = false;
+		CircleDrawable::isEditable = true;
+		PolygonDrawable::isEditable = false;
+		break;
+	case USE_POLYS:
+		LineDrawable::isEditable = false;
+		RectangleDrawable::isEditable = false;
+		CircleDrawable::isEditable = false;
+		PolygonDrawable::isEditable = true;
+		break;
+	}
+}
+
 void reshape(int w, int h)
 {
 	glViewport(0, 0, w, h);
@@ -164,6 +195,7 @@ void reshape(int w, int h)
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	setEditableDrawables(useType);
 	for (std::list<Drawable *>::iterator it = drawableList.begin(); it != drawableList.end(); it++)
 	{
 		if (typeid(**it) == typeid(CircleDrawable))

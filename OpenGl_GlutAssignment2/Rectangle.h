@@ -6,6 +6,7 @@
 class RectangleDrawable : public Drawable
 {
 public:
+	static bool isEditable;
 	void Drawable::draw();
 	void Drawable::remove();
 	void Drawable::setDrawColour(Vector3 colour);
@@ -21,6 +22,7 @@ public:
 	void setEndPosition(int x,int y);
 	void setEndPosition(Vector2 endPosition);
 private:
+
 	Vector2 startHotSpot, endHotSpot;
 	Vector3 drawColour;
 };

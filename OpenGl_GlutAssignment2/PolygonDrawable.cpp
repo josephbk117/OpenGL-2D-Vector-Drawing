@@ -1,15 +1,20 @@
 #include "PolygonDrawable.h"
 
+bool PolygonDrawable::isEditable = true;
+
 void PolygonDrawable::draw()
 {
-	glPointSize(5);
-	glBegin(GL_POINTS);
-	glColor3f(drawColour.getX() + 0.3f, drawColour.getY() + 0.1f, drawColour.getZ() + 0.1f);
-	for (std::list<Vector2>::iterator it = hotSpots.begin(); it != hotSpots.end(); it++)
+	if (isEditable)
 	{
-		glVertex2i(it->getX(), it->getY());
+		glPointSize(5);
+		glBegin(GL_POINTS);
+		glColor3f(drawColour.getX() + 0.3f, drawColour.getY() + 0.1f, drawColour.getZ() + 0.1f);
+		for (std::list<Vector2>::iterator it = hotSpots.begin(); it != hotSpots.end(); it++)
+		{
+			glVertex2i(it->getX(), it->getY());
+		}
+		glEnd();
 	}
-	glEnd();
 
 	glColor3f(drawColour.getX(), drawColour.getY(), drawColour.getZ());
 	glBegin(GL_POLYGON);
@@ -18,7 +23,7 @@ void PolygonDrawable::draw()
 	{
 		glVertex2i(it->getX(), it->getY());
 	}
-	glEnd();	
+	glEnd();
 }
 void PolygonDrawable::setDrawColour(Vector3 colour)
 {

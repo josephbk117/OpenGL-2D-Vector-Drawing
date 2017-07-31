@@ -8,6 +8,7 @@
 class PolygonDrawable : public Drawable
 {
 public:
+	static bool isEditable;
 	void Drawable::draw();
 	void Drawable::remove();
 	void Drawable::setDrawColour(Vector3 colour);

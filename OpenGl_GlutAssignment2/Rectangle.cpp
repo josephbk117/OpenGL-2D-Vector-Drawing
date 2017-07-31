@@ -1,9 +1,20 @@
 #include "Rectangle.h"
 
+bool RectangleDrawable::isEditable = true;
+
 void RectangleDrawable::draw()
 {
-	glPointSize(5);
 	glColor3f(drawColour.getX(), drawColour.getY(), drawColour.getZ());
+
+	if (isEditable)
+	{
+		glPointSize(5);
+		glBegin(GL_POINTS);
+		glVertex2i(startHotSpot.getX(), startHotSpot.getY());
+		glVertex2i(endHotSpot.getX(), endHotSpot.getY());
+		glEnd();
+	}
+
 	glBegin(GL_LINES);
 	
 	glVertex2i(startHotSpot.getX(), startHotSpot.getY());
@@ -17,13 +28,6 @@ void RectangleDrawable::draw()
 
 	glVertex2i(endHotSpot.getX(), startHotSpot.getY());
 	glVertex2i(startHotSpot.getX(), startHotSpot.getY());
-
-	glEnd();
-
-	glPointSize(5);
-	glBegin(GL_POINTS);
-	glVertex2i(startHotSpot.getX(), startHotSpot.getY());
-	glVertex2i(endHotSpot.getX(), endHotSpot.getY());
 	glEnd();
 }
 

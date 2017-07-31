@@ -1,13 +1,18 @@
 #include "LineDrawable.h"
 
+bool LineDrawable::isEditable = true;
+
 void LineDrawable::draw()
 {
 	glColor3f(drawColor.getX(), drawColor.getY(), drawColor.getZ());
-	glPointSize(5);
-	glBegin(GL_POINTS);
-	glVertex2i(hotSpot1.getX(), hotSpot1.getY());
-	glVertex2i(hotSpot2.getX(), hotSpot2.getY());
-	glEnd();
+	if (isEditable)
+	{
+		glPointSize(5);
+		glBegin(GL_POINTS);
+		glVertex2i(hotSpot1.getX(), hotSpot1.getY());
+		glVertex2i(hotSpot2.getX(), hotSpot2.getY());
+		glEnd();
+	}
 	
 	glBegin(GL_LINES);
 	glVertex2i(hotSpot1.getX(), hotSpot1.getY());
@@ -27,7 +32,6 @@ Vector3 LineDrawable::getDrawColour()
 {
 	return drawColor;
 }
-
 LineDrawable::LineDrawable()
 {
 	this->hotSpot1 = Vector2(0, 0);

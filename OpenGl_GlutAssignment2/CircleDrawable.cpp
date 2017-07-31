@@ -1,10 +1,21 @@
 #include "CircleDrawable.h"
 #define PI 3.14159265
 
+bool CircleDrawable::isEditable = true;
 void CircleDrawable::draw()
 {
 	float incValue = (float)(2.0f * PI) / (float)segments;
 	glColor3f(drawColour.getX(), drawColour.getY(), drawColour.getZ());
+
+	if (isEditable)
+	{
+		glPointSize(5);
+		glBegin(GL_POINTS);
+		glVertex2i(centerPosition.getX(), centerPosition.getY());
+		glVertex2i(centerPosition.getX(), centerPosition.getY() + radius);
+		glEnd();
+	}
+
 	glBegin(GL_LINES);
 	for (int i = 1; i < segments; i++)
 	{
@@ -24,14 +35,8 @@ void CircleDrawable::draw()
 
 	glVertex2i(x, y);
 	glVertex2i(x1, y1);
-
 	glEnd();
-	//Hotspot
-	glPointSize(5);
-	glBegin(GL_POINTS);
-	glVertex2i(centerPosition.getX(), centerPosition.getY());
-	glVertex2i(centerPosition.getX(), centerPosition.getY() + radius);
-	glEnd();
+	
 }
 void CircleDrawable::remove()
 {
