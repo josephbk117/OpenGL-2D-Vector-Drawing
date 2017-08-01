@@ -119,12 +119,6 @@ void mouseClicks(int button, int state, int x, int y)
 	{
 		if (state == GLUT_DOWN)
 		{
-			//Make function that takes pram as mouse position 
-			//then go through all vector2s in all objects
-			//then find closest one
-			//then return the address of it.
-			//then use that Vector2 pointer and place it when mouse up
-
 			if (isEditMode)
 			{
 				getClickedHotspot(x, y);
@@ -264,12 +258,6 @@ void reshape(int w, int h)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	float aspect = 16.0f / 9.0f;
-	/*if (w >= h) {
-		gluOrtho2D(-(960 / 2) * aspect, (960 / 2) * aspect, -(960 / 2), (960 / 2));
-	}
-	else {
-		gluOrtho2D(-(960 / 2), (960 / 2), -(960 / 2) / aspect, (960 / 2) / aspect);
-	}*/
 	gluOrtho2D(0, w, h, 0);
 	glMatrixMode(GL_MODELVIEW);
 }
