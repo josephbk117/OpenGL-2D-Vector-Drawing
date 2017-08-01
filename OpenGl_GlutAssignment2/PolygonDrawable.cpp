@@ -17,11 +17,16 @@ void PolygonDrawable::draw()
 	}
 
 	glColor3f(drawColour.getX(), drawColour.getY(), drawColour.getZ());
-	glBegin(GL_POLYGON);
-
-	for (std::list<Vector2>::iterator it = hotSpotList.begin(); it != hotSpotList.end(); it++)
+	glBegin(GL_LINES);
+	for (int i = 1; i < hotSpotCount; i++)
 	{
-		glVertex2i(it->getX(), it->getY());
+		glVertex2i(std::next(hotSpotList.begin(), i)->getX(), std::next(hotSpotList.begin(), i)->getY());
+		glVertex2i(std::next(hotSpotList.begin(), i - 1)->getX(), std::next(hotSpotList.begin(), i - 1)->getY());
+	}
+	if (hotSpotCount > 2)
+	{
+		glVertex2i(std::next(hotSpotList.begin(), 0)->getX(), std::next(hotSpotList.begin(), 0)->getY());
+		glVertex2i(std::next(hotSpotList.begin(), hotSpotCount - 1)->getX(), std::next(hotSpotList.begin(), hotSpotCount - 1)->getY());
 	}
 	glEnd();
 }
