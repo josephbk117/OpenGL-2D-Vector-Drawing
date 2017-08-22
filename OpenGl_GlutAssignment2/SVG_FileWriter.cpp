@@ -20,7 +20,7 @@ void SVG_FileWriter::outputToFile(std::string outputFilePath)
 			(*it)->getHotspots(vec);
 			Vector3 colorVal = (*it)->getDrawColour();
 			//stroke = "rgb(190,50,120)"
-			std::string color = "rgb(" + std::to_string(colorVal.getX()) + "," + std::to_string(colorVal.getY()) + "," + std::to_string(colorVal.getZ()) + ")";
+			std::string color = "rgb(" + std::to_string((int)(colorVal.getX() * 255)) + "," + std::to_string((int)(colorVal.getY() * 255)) + "," + std::to_string((int)(colorVal.getZ() * 255)) + ")";
 			if (typeid(**it) == typeid(LineDrawable))
 			{
 				//<line x1="50" y1="50" x2="200" y2="200" stroke="blue" stroke-width="4" />
@@ -30,6 +30,16 @@ void SVG_FileWriter::outputToFile(std::string outputFilePath)
 				x2 = vec[1]->getX();
 				y2 = vec[1]->getY();
 				file << "<line x1=\"" + std::to_string(x1) + "\" y1=\"" + std::to_string(y1) + "\" x2 =\"" + std::to_string(x2) + "\" y2 = \"" + std::to_string(y2) + "\" stroke=\"" + color + "\" stroke-width =\"4\"/>";
+			}
+			else if (typeid(**it) == typeid(RectangleDrawable))
+			{
+				//<rect x="25" y="25" width="200" height="200" fill="lime" stroke-width="4" stroke="pink" />
+				int x, y, width, height;
+				x = vec[0]->getX();
+				y = vec[0]->getY();
+				width = std::abs(vec[1]->getX() - x);
+				height = std::abs(vec[1]->getY() - y);
+				file << "<rect x=\"" + std::to_string(x) + "\" y=\"" + std::to_string(y) + "\" width =\"" + std::to_string(width) + "\" height = \"" + std::to_string(height) + "\" stroke=\"" + color + "\" stroke-width =\"4\" fill=\"none\"/>";
 			}
 		}
 		file << "</svg>";

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <list>
 #include <string>
+#include <math.h>
 #include "Drawable.h"
 #include "LineDrawable.h"
 #include "Rectangle.h"
