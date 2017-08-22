@@ -257,7 +257,6 @@ void reshape(int w, int h)
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	float aspect = 16.0f / 9.0f;
 	gluOrtho2D(0, w, h, 0);
 	glMatrixMode(GL_MODELVIEW);
 }

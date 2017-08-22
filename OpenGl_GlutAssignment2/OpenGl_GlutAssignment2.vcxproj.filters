@@ -35,6 +35,9 @@
     <ClCompile Include="PolygonDrawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVG_FileWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">
@@ -56,6 +59,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PolygonDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVG_FileWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
