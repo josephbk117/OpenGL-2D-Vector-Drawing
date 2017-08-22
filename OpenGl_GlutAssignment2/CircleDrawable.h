@@ -19,6 +19,7 @@ public:
 	void setCircleRadius(float radius);
 	void setCircleSegments(unsigned int segments);
 	int getCircleSegmentNumber();
+	float getCircleRadius();
 	bool isCurrentVectorHeldCenter(Vector2 * currentlyHeldVector);
 	Vector2 getCircleCenter();
 	~CircleDrawable();

@@ -112,6 +112,11 @@ int CircleDrawable::getCircleSegmentNumber()
 	return segments;
 }
 
+float CircleDrawable::getCircleRadius()
+{
+	return radius;
+}
+
 bool CircleDrawable::isCurrentVectorHeldCenter(Vector2 * currentlyHeldVector)
 {
 	if (&centerPosition == currentlyHeldVector)

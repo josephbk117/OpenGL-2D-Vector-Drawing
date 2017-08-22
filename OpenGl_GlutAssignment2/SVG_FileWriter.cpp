@@ -41,6 +41,15 @@ void SVG_FileWriter::outputToFile(std::string outputFilePath)
 				height = std::abs(vec[1]->getY() - y);
 				file << "<rect x=\"" + std::to_string(x) + "\" y=\"" + std::to_string(y) + "\" width =\"" + std::to_string(width) + "\" height = \"" + std::to_string(height) + "\" stroke=\"" + color + "\" stroke-width =\"4\" fill=\"none\"/>";
 			}
+			else if (typeid(**it) == typeid(CircleDrawable))
+			{
+				//<circle cx="125" cy="125" r="75" fill="orange" />
+				int x, y;
+				float radius = dynamic_cast<CircleDrawable *>(*it)->getCircleRadius();
+				x = vec[0]->getX();
+				y = vec[0]->getY();
+				file << "<circle cx=\"" + std::to_string(x) + "\" cy=\"" + std::to_string(y) + "\" r =\"" + std::to_string(radius) + "\" stroke=\"" + color + "\" stroke-width =\"4\" fill=\"none\"/>";
+			}
 		}
 		file << "</svg>";
 		file.close();
