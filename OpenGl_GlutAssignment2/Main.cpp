@@ -6,6 +6,7 @@
 #include "Drawable.h"
 #include "LineDrawable.h"
 #include "PolygonDrawable.h"
+#include "SVG_FileWriter.h"
 #include <list>
 #include <iterator>
 
@@ -35,7 +36,11 @@ const unsigned int MIN_CIRCLE_SEGMENTS = 4;
 
 void processNormalKeys(unsigned char key, int x, int y)
 {
-
+	if (key == 'a')
+	{
+		SVG_FileWriter writer(drawableList);
+		writer.outputToFile("SVG_LOLZ.svg");
+	}
 }
 
 void SelectFromMenu(int commandID)
