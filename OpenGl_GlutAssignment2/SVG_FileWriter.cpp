@@ -50,6 +50,22 @@ void SVG_FileWriter::outputToFile(std::string outputFilePath)
 				y = vec[0]->getY();
 				file << "<circle cx=\"" + std::to_string(x) + "\" cy=\"" + std::to_string(y) + "\" r =\"" + std::to_string(radius) + "\" stroke=\"" + color + "\" stroke-width =\"4\" fill=\"none\"/>";
 			}
+			else if (typeid(**it) == typeid(PolygonDrawable))
+			{
+				//<polyline points="50,150 50,200 200,200 200,100" stroke="red" stroke-width="4" fill="none" />
+				std::string pointString("points=\"");
+				Vector2* points[120];
+				int vertCount = (*it)->getNumberOfHotSpots();
+				(*it)->getHotspots(points);
+				pointString += std::to_string(points[0]->getX()) + "," + std::to_string(points[0]->getY());
+				for (int i = 1; i < vertCount; i++)
+				{
+					pointString += "," + std::to_string(points[i]->getX()) + "," + std::to_string(points[i]->getY());
+				}
+				pointString += "," + std::to_string(points[0]->getX()) + "," + std::to_string(points[0]->getY());
+				pointString += "\"";
+				file << "<polyline " + pointString + " stroke=\"" + color + "\" stroke-width =\"4\" fill=\"none\"/>";
+			}
 		}
 		file << "</svg>";
 		file.close();
